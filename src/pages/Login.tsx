@@ -23,15 +23,23 @@ const Login = () => {
 
   return (
     <AppLayout showNav={false} showFooter={false}>
-      <div className="flex min-h-screen items-center justify-center p-4 md:p-8 bg-secondary/30">
-        <div className="w-full max-w-md">
+      <div 
+        className="flex min-h-screen items-center justify-center p-4 md:p-8"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat"
+        }}
+      >
+        <div className="w-full max-w-md z-10">
           <Link to="/" className="flex items-center justify-center mb-8">
-            <h1 className="font-bold text-2xl text-center text-primary">
+            <h1 className="font-bold text-2xl text-center text-primary backdrop-blur-sm bg-background/30 px-4 py-2 rounded-full">
               College<span className="text-foreground">Circle</span>
             </h1>
           </Link>
           
-          <Card>
+          <Card className="backdrop-blur-md bg-card/90 border-white/20 shadow-xl">
             <CardHeader>
               <CardTitle className="text-center">Log In</CardTitle>
             </CardHeader>
