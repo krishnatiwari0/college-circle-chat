@@ -5,37 +5,52 @@ import ProfileCard from "@/components/ProfileCard";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-// Mock data for example profiles
+// Mock data for example profiles with names and profile pictures
 const mockProfiles = [
   {
     id: "1",
+    name: "Alex Johnson",
     collegeYear: "1st Year",
     bio: "Computer science major with a passion for AI and machine learning. Also love playing basketball and video games in my free time!",
     interests: ["Technology", "AI", "Basketball", "Gaming", "Coding"],
+    profilePicture: null,
+    friendStatus: "none" as const,
   },
   {
     id: "2",
+    name: "Taylor Smith",
     collegeYear: "2nd Year",
     bio: "English literature major who loves poetry, classic novels, and writing short stories. Looking for friends to join my book club!",
     interests: ["Reading", "Writing", "Poetry", "Literature", "Art"],
+    profilePicture: null,
+    friendStatus: "none" as const,
   },
   {
     id: "3",
+    name: "Jordan Lee",
     collegeYear: "1st Year",
     bio: "Biology major with a minor in environmental science. Passionate about conservation and sustainability. Love hiking and wildlife photography!",
     interests: ["Science", "Environment", "Photography", "Hiking", "Nature"],
+    profilePicture: null,
+    friendStatus: "none" as const,
   },
   {
     id: "4",
+    name: "Riley Chen",
     collegeYear: "3rd Year",
     bio: "Business major focusing on entrepreneurship. Currently working on a startup idea and looking for like-minded individuals to bounce ideas off of.",
     interests: ["Business", "Entrepreneurship", "Technology", "Innovation", "Marketing"],
+    profilePicture: null,
+    friendStatus: "none" as const,
   },
   {
     id: "5",
+    name: "Morgan Williams",
     collegeYear: "2nd Year",
     bio: "Film studies major with a love for cinematography and screenplay writing. Always looking to collaborate on short film projects!",
     interests: ["Film", "Writing", "Photography", "Art", "Music"],
+    profilePicture: null,
+    friendStatus: "none" as const,
   },
 ];
 
@@ -79,6 +94,9 @@ const Browse = () => {
                 collegeYear={currentProfile.collegeYear}
                 bio={currentProfile.bio}
                 interests={currentProfile.interests}
+                name={currentProfile.name}
+                profilePicture={currentProfile.profilePicture}
+                friendStatus={currentProfile.friendStatus}
                 onSwipeLeft={handleSwipeLeft}
                 onSwipeRight={handleSwipeRight}
               />

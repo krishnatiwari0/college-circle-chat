@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,8 +20,9 @@ import {
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import AppLayout from "@/components/AppLayout";
-import { X } from "lucide-react";
+import { X, Camera, UserCircle } from "lucide-react";
 import { toast } from "sonner";
 
 const collegeYears = ["1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year", "Graduate Student"];
@@ -34,10 +35,13 @@ const popularInterests = [
 ];
 
 const CreateProfile = () => {
+  const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [collegeYear, setCollegeYear] = useState("");
   const [interests, setInterests] = useState<string[]>([]);
   const [customInterest, setCustomInterest] = useState("");
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const handleAddInterest = (interest: string) => {
@@ -58,6 +62,23 @@ const CreateProfile = () => {
     handleAddInterest(customInterest);
   };
 
+  const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          setProfilePicture(e.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleTriggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (interests.length === 0) {
@@ -68,8 +89,13 @@ const CreateProfile = () => {
       toast.warning("Please select your college year");
       return;
     }
+    if (!name.trim()) {
+      toast.warning("Please enter your name");
+      return;
+    }
     
     // Simulate profile creation success
+    // In a real app, you would save all this data including the name and profile picture
     toast.success("Profile created successfully!");
     navigate("/browse");
   };
@@ -86,6 +112,50 @@ const CreateProfile = () => {
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-6">
+              <div className="flex flex-col items-center space-y-3">
+                <div 
+                  className="relative cursor-pointer"
+                  onClick={handleTriggerFileInput}
+                >
+                  <Avatar className="h-28 w-28">
+                    {profilePicture ? (
+                      <AvatarImage src={profilePicture} />
+                    ) : (
+                      <AvatarFallback className="bg-primary/10">
+                        <UserCircle className="h-20 w-20 opacity-50" />
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
+                  <div className="absolute -bottom-1 -right-1 rounded-full bg-primary p-1.5">
+                    <Camera className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleProfilePictureChange}
+                />
+                <p className="text-sm text-muted-foreground">
+                  Add profile picture
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="name">Your Name</Label>
+                <Input
+                  id="name"
+                  placeholder="Enter your name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+                <p className="text-xs text-muted-foreground">
+                  Your name will only be visible to others after connecting
+                </p>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="year">What year are you in?</Label>
                 <Select 
@@ -176,7 +246,7 @@ const CreateProfile = () => {
               <Button 
                 type="submit" 
                 className="w-full"
-                disabled={interests.length === 0 || !collegeYear}
+                disabled={interests.length === 0 || !collegeYear || !name.trim()}
               >
                 Create Profile
               </Button>

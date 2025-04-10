@@ -4,12 +4,16 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, X, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface ProfileCardProps {
   id: string;
   collegeYear: string;
   bio: string;
   interests: string[];
+  name?: string;
+  profilePicture?: string;
+  friendStatus?: "pending" | "accepted" | "none";
   onSwipeLeft: (id: string) => void;
   onSwipeRight: (id: string) => void;
 }
@@ -19,6 +23,9 @@ const ProfileCard = ({
   collegeYear,
   bio,
   interests,
+  name,
+  profilePicture,
+  friendStatus = "none",
   onSwipeLeft,
   onSwipeRight,
 }: ProfileCardProps) => {
@@ -41,6 +48,9 @@ const ProfileCard = ({
     }, 300);
   };
 
+  // Only show name if they've accepted the friend request
+  const showName = friendStatus === "accepted" && name;
+
   return (
     <Card
       className={`shadow-lg max-w-md mx-auto transition-all duration-300 
@@ -51,10 +61,18 @@ const ProfileCard = ({
       <CardContent className="p-6">
         <div className="space-y-4">
           <div className="bg-primary/10 p-4 rounded-lg flex items-center justify-center h-48">
-            <span className="text-6xl opacity-50">👋</span>
+            {profilePicture ? (
+              <Avatar className="h-40 w-40">
+                <AvatarImage src={profilePicture} alt="Profile" />
+                <AvatarFallback className="text-6xl">👋</AvatarFallback>
+              </Avatar>
+            ) : (
+              <span className="text-6xl opacity-50">👋</span>
+            )}
           </div>
           
           <div>
+            {showName && <h3 className="font-bold text-lg mb-1">{name}</h3>}
             <h3 className="font-medium">{collegeYear}</h3>
             <p className="mt-2">{bio}</p>
           </div>
@@ -63,7 +81,7 @@ const ProfileCard = ({
             {interests.map((interest) => (
               <span
                 key={interest}
-                className="interest-tag"
+                className="bg-secondary text-secondary-foreground px-3 py-1 text-sm rounded-full"
               >
                 {interest}
               </span>
