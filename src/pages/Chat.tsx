@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -45,12 +44,12 @@ const mockProfiles = {
   },
 };
 
-// Mock initial messages
+// Fixed the initialMessages to use the correct "self" | "other" type for sender
 const initialMessages = [
   {
     id: "1",
     content: "Hey there! I noticed we both like technology. What kind of projects are you working on?",
-    sender: "other",
+    sender: "other" as const,
     timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
   },
 ];
